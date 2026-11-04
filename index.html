@@ -52,12 +52,76 @@ const cs=document.getElementById('classSelect');for(let i=1;i<=12;i++){let o=doc
 function tab(id){document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id))}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
 const data=[{k:['photosynthesis','plant','प्रकाश संश्लेषण'],en:'Photosynthesis is how green plants make food using sunlight, water and carbon dioxide. Oxygen is released.',hi:'प्रकाश संश्लेषण वह प्रक्रिया है जिसमें हरे पौधे सूर्य के प्रकाश, पानी और कार्बन डाइऑक्साइड से भोजन बनाते हैं। इसमें ऑक्सीजन निकलती है।'},{k:['fraction','भिन्न'],en:'A fraction shows a part of a whole. For example, 3/4 means 4 equal parts make one whole and we consider 3 parts.',hi:'भिन्न किसी पूरी वस्तु के हिस्से को दर्शाती है। 3/4 का अर्थ है 4 बराबर हिस्सों में से 3 हिस्से।'},{k:['पृथ्वी','earth','origin'],en:'Earth formed about 4.6 billion years ago from dust and rocky material orbiting the young Sun.',hi:'पृथ्वी का निर्माण लगभग 4.6 अरब वर्ष पहले युवा सूर्य के चारों ओर मौजूद धूल और चट्टानी पदार्थों से हुआ।'}];
-function getAnswer(q){let a=data.find(x=>x.k.some(k=>q.toLowerCase().includes(k)));let l=document.getElementById('language').value;return a?(l==='hi'?a.hi:l==='hinglish'?'Simple explanation: '+a.en:a.en):(l==='hi'?'यह सवाल इस छोटे demo में शामिल नहीं है। अभी live AI connect नहीं है।':'This question is not included in this small demo. A live AI tutor is not connected yet.')}
-function bubble(t,c){let d=document.createElement('div');d.className='bubble '+c;d.textContent=t;document.getElementById('chat').appendChild(d);d.scrollIntoView({block:'end',behavior:'smooth'})}
-function ask(q){if(!q.trim())return;bubble(q,'user');setTimeout(()=>bubble('DEMO ANSWER\n'+getAnswer(q),'bot'),200)}
+async function getAIAnswer(q){
+  const response = await fetch(
+    "https://studyguide.vipinjatav077.workers.dev",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        question: q,
+        className: document.getElementById('classSelect').value,
+        subject: document.getElementById('subject').value,
+        language: document.getElementById('language').value
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "AI request failed");
+  }
+
+  return data.answer || "No answer received.";
+}
+
+function bubble(t,c){
+  let d=document.createElement('div');
+  d.className='bubble '+c;
+  d.textContent=t;
+  document.getElementById('chat').appendChild(d);
+  d.scrollIntoView({block:'end',behavior:'smooth'});
+}
+
+async function ask(q){
+  if(!q.trim()) return;
+
+  bubble(q,'user');
+  let loading=document.createElement('div');
+  loading.className='bubble bot';
+  loading.textContent='StudyGenius AI is thinking...';
+  document.getElementById('chat').appendChild(loading);
+
+  try {
+    loading.textContent = await getAIAnswer(q);
+  } catch(error) {
+    loading.textContent = 'Connection error: ' + error.message;
+  }
+  }
 document.getElementById('chatForm').onsubmit=e=>{e.preventDefault();let i=document.getElementById('question');ask(i.value);i.value=''};
 document.querySelectorAll('.sample').forEach(b=>b.onclick=()=>ask(b.dataset.q));
 document.getElementById('photoFile').addEventListener('change',e=>{let f=e.target.files[0],img=document.getElementById('photoPreview');if(!f){img.style.display='none';img.removeAttribute('src');return}if(!f.type.startsWith('image/')){alert('Please choose an image file.');e.target.value='';return}let reader=new FileReader();reader.onload=ev=>{img.src=ev.target.result;img.style.display='block'};reader.readAsDataURL(f);document.getElementById('photoAnswer').style.display='none'});
-document.getElementById('solvePhoto').onclick=()=>{let q=document.getElementById('photoQuestion').value.trim(),box=document.getElementById('photoAnswer');if(!q){box.style.display='block';box.textContent='Please type the question shown in your photo first.';return}box.style.display='block';box.textContent='DEMO EXPLANATION\n'+getAnswer(q)};
+document.getElementById('solvePhoto').onclick=async()=>{
+  let q=document.getElementById('photoQuestion').value.trim();
+  let box=document.getElementById('photoAnswer');
+
+  box.style.display='block';
+
+  if(!q){
+    box.textContent='Please type your question first.';
+    return;
+  }
+
+  box.textContent='AI is solving your question...';
+
+  try {
+    box.textContent=await getAIAnswer(q);
+  } catch(error) {
+    box.textContent='Connection error: '+error.message;
+  }
+};
 document.getElementById('quizForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),s=Number(f.get('q1')==='b')+Number(f.get('q2')==='a')+Number(f.get('q3')==='a');document.getElementById('result').textContent='Your score: '+s+' / 3'+(s===3?' — Excellent work!':' — Keep practising!')};
 </script></body></html>
