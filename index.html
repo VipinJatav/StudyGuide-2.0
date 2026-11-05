@@ -22,12 +22,193 @@ select,input,textarea{width:100%;background:#091629;border:1px solid #304967;col
 .uploadbox{border:1px dashed #4a7197;border-radius:13px;padding:16px;text-align:center;background:#0a1a2d}.preview{display:none;max-width:100%;max-height:260px;object-fit:contain;margin:12px auto 0;border-radius:10px}.warning{font-size:12px;color:#ffd68a;line-height:1.5}.answerbox{display:none;background:#142d4c;border:1px solid #2e4d70;border-radius:12px;padding:13px;margin-top:12px;white-space:pre-wrap}
 @media(max-width:700px){.app{grid-template-columns:1fr;padding:9px}aside{padding:13px;gap:10px}nav{grid-template-columns:repeat(5,1fr)}nav button{text-align:center;padding:9px 2px;font-size:11px}.note-side{display:none}main{padding:15px}.title{font-size:23px}}
 @media(max-width:430px){.cards{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.chatform{flex-direction:column}.bubble{max-width:96%}}
+/* THEME COLORS */
+:root {
+  --input-bg: #091629;
+  --surface: #101e35;
+  --soft: #0b1a2e;
+  --soft2: #142d4c;
+}
+
+body[data-theme="light"] {
+  --bg: #f2f6fc;
+  --p: #ffffff;
+  --p2: #eaf1fa;
+  --line: #d4dfed;
+  --txt: #172b45;
+  --muted: #5d7088;
+  --blue: #1687ee;
+  --cyan: #087eaa;
+  --input-bg: #ffffff;
+  --surface: #ffffff;
+  --soft: #f5f8fd;
+  --soft2: #eaf2fc;
+}
+
+body {
+  background: radial-gradient(
+    circle at 85% 0,
+    var(--p2),
+    var(--bg) 55%
+  );
+  color: var(--txt);
+}
+
+aside, main {
+  background: var(--surface);
+  border-color: var(--line);
+}
+
+.stat, .panel, .note {
+  background: var(--soft);
+  border-color: var(--line);
+  color: var(--txt);
+}
+
+.note p, .sub, .small, .field label {
+  color: var(--muted);
+}
+
+select, input, textarea {
+  background: var(--input-bg);
+  color: var(--txt);
+  border-color: var(--line);
+}
+
+nav button {
+  color: var(--muted);
+}
+
+nav button.active,
+nav button:hover {
+  background: var(--p2);
+  color: var(--txt);
+}
+
+.secondary {
+  background: var(--p2);
+  border-color: var(--line);
+  color: var(--txt);
+}
+
+.bot, .answerbox {
+  background: var(--soft2);
+  border-color: var(--line);
+  color: var(--txt);
+}
+
+.quiz-q {
+  background: var(--soft2);
+  border-color: var(--line);
+  color: var(--txt);
+}
+
+.uploadbox {
+  background: var(--soft);
+  border-color: var(--line);
+}
+
+.note-side {
+  background: var(--p2);
+  color: var(--txt);
+}
+
+.footer {
+  color: var(--muted);
+}
+
+body[data-theme="light"] .tag {
+  background: #e1f3ff;
+  color: #075b8c;
+  border-color: #a9d9f5;
+}
+
+body[data-theme="light"] .demo {
+  background: #fff3d8;
+  color: #805400;
+  border-color: #f0d18b;
+}
+
+/* THEME SWITCH */
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-switch {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  color: var(--txt);
+  font-size: 17px;
+}
+
+.theme-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.switch-track {
+  width: 48px;
+  height: 26px;
+  border-radius: 30px;
+  background: #38516e;
+  position: relative;
+  display: inline-block;
+  transition: .25s;
+}
+
+.switch-track::after {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: .25s;
+}
+
+.theme-switch input:checked + .switch-track {
+  background: #1687ee;
+}
+
+.theme-switch input:checked + .switch-track::after {
+  transform: translateX(22px);
+}
+
+.theme-switch input:focus-visible + .switch-track {
+  outline: 3px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+@media(max-width:700px) {
+  .top-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  }
 </style></head>
 <body><div class="app">
 <aside><div class="brand"><span class="logo">SG</span>StudyGuide <span style="color:var(--cyan)">AI</span></div><span class="tag">EDUCATIONAL SPACE FOR STUDENTS</span>
 <nav><button class="active" data-tab="home">⌂ Home</button><button data-tab="photo">▧ Photo</button><button data-tab="tutor">✦ Tutor</button><button data-tab="notes">▤ Notes</button><button data-tab="quiz">✓ Quiz</button></nav>
 <div class="note-side"><b>Beta Testing</b><br>Prepared Notes, Quizzes With Live Ai. No student data is saved.</div></aside>
-<main><div class="top"><div><div class="eyebrow">YOUR PERSONAL LEARNING SPACE</div><div class="title">Learn smarter, every day.</div><p class="sub">A learning companion concept for Classes 1–12.</p></div><span class="demo">DEMO · SAMPLE CONTENT</span></div>
+<main><div class="top"><div><div class="eyebrow">YOUR PERSONAL LEARNING SPACE</div><div class="title">Learn smarter, every day.</div><p class="sub">A learning companion concept for Classes 1–12.</p></div><div class="top-actions">
+  <label class="theme-switch" title="Change website theme">
+    <span>☀️</span>
+    <input type="checkbox" id="themeToggle"
+           aria-label="Switch to light theme">
+    <span class="switch-track"></span>
+    <span>🌙</span>
+  </label>
+
+  <span class="demo">DEMO · SAMPLE CONTENT</span>
+</div>
 <section id="home" class="section active">
 <div class="cards"><div class="stat"><strong>1–12</strong><span>Classes</span></div><div class="stat"><strong>3</strong><span>Learning tools</span></div><div class="stat"><strong>3</strong><span>Languages</span></div></div>
 <div class="panel"><h2>Set up your learning</h2><div class="row"><div class="field"><label>Choose class</label><select id="classSelect"></select></div><div class="field"><label>Choose subject</label><select id="subject"><option>Science</option><option>Mathematics</option><option>English</option><option>Hindi</option><option>Social Science</option><option>Social logy</option><option>Physical Education</option><option>Political Science</option><option>Geography</option><option>History</option></select></div><div class="field"><label>Language</label><select id="language"><option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option></select></div></div><p class="sub" style="margin:12px 0">Choose your class, subject and language, then explore the demo tools.</p><button class="primary" onclick="tab('tutor')">Open AI Tutor →</button></div>
@@ -48,6 +229,23 @@ select,input,textarea{width:100%;background:#091629;border:1px solid #304967;col
 <div class="footer">StudyGenius AI Prototype · Educational demonstration only · No account or student data collection</div>
 </main></div>
 <script>
+// DARK AND LIGHT THEME
+const themeToggle = document.getElementById('themeToggle');
+
+const savedTheme = localStorage.getItem('studygenius-theme');
+
+document.body.dataset.theme =
+  savedTheme === 'light' ? 'light' : 'dark';
+
+themeToggle.checked = savedTheme === 'light';
+
+themeToggle.addEventListener('change', () => {
+  const theme = themeToggle.checked ? 'light' : 'dark';
+
+  document.body.dataset.theme = theme;
+
+  localStorage.setItem('studygenius-theme', theme);
+});
 const cs=document.getElementById('classSelect');for(let i=1;i<=12;i++){let o=document.createElement('option');o.value=i;o.textContent='Class '+i;if(i===11)o.selected=true;cs.appendChild(o)}
 function tab(id){document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id))}
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>tab(b.dataset.tab));
