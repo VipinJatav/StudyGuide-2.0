@@ -212,7 +212,7 @@ body[data-theme="light"] .demo {
 <div class="cards"><div class="stat"><strong>1–12</strong><span>Classes</span></div><div class="stat"><strong>3</strong><span>Learning tools</span></div><div class="stat"><strong>3</strong><span>Languages</span></div></div>
 <div class="panel"><h2>Set up your learning</h2><div class="row"><div class="field"><label>Choose class</label><select id="classSelect"></select></div><div class="field"><label>Choose subject</label><select id="subject"><option>Science</option><option>Mathematics</option><option>English</option><option>Hindi</option><option>Social Science</option><option>Social logy</option><option>Physical Education</option><option>Political Science</option><option>Geography</option><option>History</option></select></div><div class="field"><label>Language</label><select id="language"><option value="en">English</option><option value="hi">हिंदी</option><option value="hinglish">Hinglish</option></select></div></div><p class="sub" style="margin:12px 0">Choose your class, subject and language, then explore the demo tools.</p><button class="primary" onclick="tab('tutor')">Open AI Tutor →</button></div>
 <div class="panel"><h2>Explore the demo</h2><div class="two"><div class="note"><h3>✦ Ask questions</h3><p>Try prepared examples in the tutor chat.</p></div><div class="note"><h3>▧ Photo Solver</h3><p>Preview a question photo and type the question.</p></div><div class="note"><h3>▤ Study notes</h3><p>Read short sample notes by topic.</p></div><div class="note"><h3>✓ Practice quiz</h3><p>Answer a short test and see your score.</p></div></div></div></section>
-<section id="tutor" class="section"><div class="panel"><h2>✦ AI Tutor <span class="tag">SAMPLE RESPONSES</span></h2><p class="sub">Tap an example or type a question.</p><div class="row" style="margin:12px 0"><button class="secondary sample" data-q="Explain photosynthesis in simple words">Photosynthesis</button><button class="secondary sample" data-q="What are fractions?">Fractions</button><button class="secondary sample" data-q="पृथ्वी की उत्पत्ति कैसे हुई?">पृथ्वी की उत्पत्ति</button></div><div id="chat" class="chat"><div class="bubble bot">नमस्ते! मैं StudyGenius AI का demo tutor हूँ। कोई sample सवाल पूछकर देखो।</div></div><form id="chatForm" class="chatform"><input id="question" placeholder="Type your question..." required><button class="primary">Send</button></form><p class="small">Prepared sample answers only — not live AI.</p></div></section>
+<section id="tutor" class="section"><div class="panel"><h2>✦ AI Tutor <span class="tag">LIVE AI</span></h2><p class="sub">Tap an example or type a question.</p><div class="row" style="margin:12px 0"><button class="secondary sample" data-q="Explain photosynthesis in simple words">Photosynthesis</button><button class="secondary sample" data-q="What are fractions?">Fractions</button><button class="secondary sample" data-q="पृथ्वी की उत्पत्ति कैसे हुई?">पृथ्वी की उत्पत्ति</button></div><div id="chat" class="chat"><div class="bubble bot">नमस्ते! मैं StudyGenius AI का demo tutor हूँ। कोई sample सवाल पूछकर देखो।</div></div><form id="chatForm" class="chatform"><input id="question" placeholder="Type your question..." required><button class="primary">Send</button></form><p class="small">Prepared sample answers only — not live AI.</p></div></section>
 <section id="photo" class="section"><div class="panel"><h2>▧ Photo Question Solver <span class="tag">DEMO</span></h2><p class="sub">Choose a question photo, then type the question shown in it.</p>
 <div class="uploadbox" style="margin-top:14px"><label for="photoFile"><b>Choose a photo from your phone</b></label><input id="photoFile" type="file" accept="image/*" style="margin-top:12px"><img id="photoPreview" class="preview" alt="Selected question preview"></div>
 <div class="field" style="margin-top:14px"><label for="photoQuestion">Type the question from your photo</label><textarea id="photoQuestion" rows="3" placeholder="Example: Explain photosynthesis in simple words"></textarea></div>
@@ -225,13 +225,13 @@ body[data-theme="light"] .demo {
 <div class="quiz-q"><b>1. Which gas do plants take in during photosynthesis?</b><label><input type="radio" name="q1" value="a"> Oxygen</label><label><input type="radio" name="q1" value="b"> Carbon dioxide</label><label><input type="radio" name="q1" value="c"> Nitrogen</label></div>
 <div class="quiz-q"><b>2. What is the numerator in 3/4?</b><label><input type="radio" name="q2" value="a"> 3</label><label><input type="radio" name="q2" value="b"> 4</label><label><input type="radio" name="q2" value="c"> 7</label></div>
 <div class="quiz-q"><b>3. पृथ्वी लगभग कितने वर्ष पहले बनी?</b><label><input type="radio" name="q3" value="a"> 4.6 अरब वर्ष</label><label><input type="radio" name="q3" value="b"> 10 लाख वर्ष</label><label><input type="radio" name="q3" value="c"> 1000 वर्ष</label></div><button class="primary">Check answers</button><div id="result" class="result"></div></form></div></section>
-<div class="footer">StudyGenius AI Prototype · Educational demonstration only · No account or student data collection</div>
+<div class="footer">StudyGuide AI · Educational demonstration only · No account or student data collection</div>
 </main></div>
 <script>
 // DARK AND LIGHT THEME
 const themeToggle = document.getElementById('themeToggle');
 
-const savedTheme = localStorage.getItem('studygenius-theme');
+const savedTheme = localStorage.getItem('studyguide-theme');
 
 document.body.dataset.theme =
   savedTheme === 'light' ? 'light' : 'dark';
@@ -289,7 +289,7 @@ async function ask(q){
   bubble(q,'user');
   let loading=document.createElement('div');
   loading.className='bubble bot';
-  loading.textContent='StudyGenius AI is thinking...';
+  loading.textContent='StudyGuide AI is thinking...';
   document.getElementById('chat').appendChild(loading);
 
   try {
