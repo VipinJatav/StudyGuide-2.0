@@ -220,7 +220,22 @@ body[data-theme="light"] .demo {
 <div id="photoAnswer" class="answerbox"></div>
 <p class="warning" style="margin-top:12px">Demo limitation: this version only previews your image. It does not read text from the image or send it to AI. The explanation is selected from prepared examples. Your image is not uploaded to a server.</p>
 </div></section>
-<section id="notes" class="section"><div class="panel"><h2>▤ Quick Study Notes</h2><p class="sub">Sample notes for demonstration.</p><div class="two" style="margin-top:14px"><article class="note"><h3>Photosynthesis</h3><p>Plants use sunlight, water and carbon dioxide to make food. Oxygen is released.</p></article><article class="note"><h3>Fractions</h3><p>A fraction represents part of a whole. In 3/4, 3 is the numerator and 4 is the denominator.</p></article><article class="note"><h3>पृथ्वी की उत्पत्ति</h3><p>सौरमंडल का निर्माण लगभग 4.6 अरब वर्ष पहले गैस और धूल के बादल से हुआ। पृथ्वी भी इसी प्रक्रिया का हिस्सा है।</p></article><article class="note"><h3>Water Cycle</h3><p>Water moves through evaporation, condensation and precipitation. This is the water cycle.</p></article></div></div></section>
+<section id="notes" class="section">
+  <div class="panel">
+    <h2>📚 Notes Library</h2>
+    <p class="sub">Choose your class, subject and chapter.</p>
+
+    <label for="notesClass">Select Class</label>
+    <select id="notesClass">
+      <option value="">Choose Class</option>
+    </select>
+
+    <div id="notesSubjects" style="margin-top:15px"></div>
+    <div id="notesPapers" style="margin-top:15px"></div>
+    <div id="notesChapters" style="margin-top:15px"></div>
+    <div id="notesContent" style="margin-top:15px"></div>
+  </div>
+</section>
 <section id="quiz" class="section"><div class="panel"><h2>✓ Quick Quiz</h2><p class="sub">Choose an answer and check your score.</p><form id="quizForm">
 <div class="quiz-q"><b>1. Which gas do plants take in during photosynthesis?</b><label><input type="radio" name="q1" value="a"> Oxygen</label><label><input type="radio" name="q1" value="b"> Carbon dioxide</label><label><input type="radio" name="q1" value="c"> Nitrogen</label></div>
 <div class="quiz-q"><b>2. What is the numerator in 3/4?</b><label><input type="radio" name="q2" value="a"> 3</label><label><input type="radio" name="q2" value="b"> 4</label><label><input type="radio" name="q2" value="c"> 7</label></div>
