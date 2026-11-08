@@ -338,13 +338,103 @@ document.getElementById('solvePhoto').onclick=async()=>{
   }
 };
 document.getElementById('quizForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),s=Number(f.get('q1')==='b')+Number(f.get('q2')==='a')+Number(f.get('q3')==='a');document.getElementById('result').textContent='Your score: '+s+' / 3'+(s===3?' — Excellent work!':' — Keep practising!')};
-  // NOTES LIBRARY
+// NOTES LIBRARY
 
 const classSelect = document.getElementById("notesClass");
 const subjectsBox = document.getElementById("notesSubjects");
 const papersBox = document.getElementById("notesPapers");
 const chaptersBox = document.getElementById("notesChapters");
 const contentBox = document.getElementById("notesContent");
+
+const subjectSelect = document.createElement("select");
+const chapterSelect = document.createElement("select");
+
+subjectSelect.id = "notesSubjectSelect";
+chapterSelect.id = "notesChapterSelect";
+
+function makeOption(value, text) {
+  const option = document.createElement("option");
+  option.value = value;
+  option.textContent = text;
+  return option;
+}
+
+function resetSelect(select, placeholder) {
+  select.innerHTML = "";
+  select.appendChild(makeOption("", placeholder));
+}
+
+resetSelect(subjectSelect, "Select Subject");
+resetSelect(chapterSelect, "Select Chapter");
+
+for (let i = 1; i <= 12; i++) {
+  classSelect.appendChild(
+    makeOption("Class " + i, "Class " + i)
+  );
+}
+
+classSelect.addEventListener("change", function () {
+  subjectsBox.innerHTML = "";
+  papersBox.innerHTML = "";
+  chaptersBox.innerHTML = "";
+  contentBox.innerHTML = "";
+
+  resetSelect(subjectSelect, "Select Subject");
+  resetSelect(chapterSelect, "Select Chapter");
+
+  if (!this.value) return;
+
+  const subjects = notesData[this.value];
+
+  if (!subjects) {
+    subjectsBox.innerHTML =
+      "<p>Notes for this class are coming soon.</p>";
+    return;
+  }
+
+  Object.keys(subjects).forEach(subject => {
+    subjectSelect.appendChild(makeOption(subject, subject));
+  });
+
+  subjectsBox.innerHTML = "<h3>Select Subject</h3>";
+  subjectsBox.appendChild(subjectSelect);
+});
+
+subjectSelect.addEventListener("change", function () {
+  chaptersBox.innerHTML = "";
+  contentBox.innerHTML = "";
+
+  resetSelect(chapterSelect, "Select Chapter");
+
+  if (!this.value) return;
+
+  const chapters = notesData[classSelect.value][this.value];
+
+  chapters.forEach((chapter, index) => {
+    chapterSelect.appendChild(
+      makeOption(index, chapter.chapter + " / " + chapter.hindi)
+    );
+  });
+
+  chaptersBox.innerHTML = "<h3>Select Chapter</h3>";
+  chaptersBox.appendChild(chapterSelect);
+});
+
+chapterSelect.addEventListener("change", function () {
+  contentBox.innerHTML = "";
+
+  if (this.value === "") return;
+
+  const chapter =
+    notesData[classSelect.value][subjectSelect.value][this.value];
+
+  contentBox.innerHTML = `
+    <h3>${chapter.chapter}</h3>
+    <h4>${chapter.hindi}</h4>
+    <h3>⭐ Important Notes</h3>
+    ${chapter.notes.map(note => `<p>• ${note}</p>`).join("")}
+  `;
+});
 
 // Add Class 1 to 12
 for (let i = 1; i <= 12; i++) {
