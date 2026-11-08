@@ -518,8 +518,15 @@ function showNotes(className, subject, index) {
   contentBox.innerHTML = `
     <h3>${chapter.chapter}</h3>
     <h4>${chapter.hindi}</h4>
-    <h3>⭐ Important Notes</h3>
-    ${chapter.notes.map(note => `<p>• ${note}</p>`).join("")}
+    <h3>⭐ Important Notes / महत्वपूर्ण नोट्स</h3>
+
+    ${chapter.notes.map((note, i) => `
+      <div class="panel" style="margin:12px 0">
+        <h4>Point ${i + 1}</h4>
+        <p><b>हिंदी:</b> ${note.hi}</p>
+        <p><b>English:</b> ${note.en}</p>
+      </div>
+    `).join("")}
   `;
 }
 </script></body></html>
