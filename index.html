@@ -336,4 +336,98 @@ document.getElementById('solvePhoto').onclick=async()=>{
   }
 };
 document.getElementById('quizForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),s=Number(f.get('q1')==='b')+Number(f.get('q2')==='a')+Number(f.get('q3')==='a');document.getElementById('result').textContent='Your score: '+s+' / 3'+(s===3?' — Excellent work!':' — Keep practising!')};
+  // NOTES LIBRARY
+
+const classSelect = document.getElementById("notesClass");
+const subjectsBox = document.getElementById("notesSubjects");
+const papersBox = document.getElementById("notesPapers");
+const chaptersBox = document.getElementById("notesChapters");
+const contentBox = document.getElementById("notesContent");
+
+// Add Class 1 to 12
+for (let i = 1; i <= 12; i++) {
+  const option = document.createElement("option");
+  option.value = "Class " + i;
+  option.textContent = "Class " + i;
+  classSelect.appendChild(option);
+}
+
+// Select Class
+classSelect.addEventListener("change", function () {
+  const selectedClass = this.value;
+
+  subjectsBox.innerHTML = "";
+  papersBox.innerHTML = "";
+  chaptersBox.innerHTML = "";
+  contentBox.innerHTML = "";
+
+  if (!selectedClass) return;
+
+  // Official CBSE papers
+  if (["Class 10", "Class 12"].includes(selectedClass)) {
+    papersBox.innerHTML = `
+      <h3>📄 Previous Year Papers</h3>
+      <p>Available years: 2023, 2024, 2025</p>
+      <a href="https://www.cbse.gov.in/cbsenew/question-paper.html"
+         target="_blank">
+         Open Official CBSE Question Papers
+      </a>
+    `;
+  }
+
+  const subjects = notesData[selectedClass];
+
+  if (!subjects) {
+    subjectsBox.innerHTML =
+      "<p>Notes for this class are being added soon.</p>";
+    return;
+  }
+
+  subjectsBox.innerHTML = "<h3>📚 Select Subject</h3>";
+
+  Object.keys(subjects).forEach(subject => {
+    const btn = document.createElement("button");
+    btn.className = "secondary";
+    btn.style.margin = "5px";
+    btn.textContent = subject;
+
+    btn.onclick = function () {
+      showChapters(selectedClass, subject);
+    };
+
+    subjectsBox.appendChild(btn);
+  });
+});
+
+// Show Chapters
+function showChapters(className, subject) {
+  chaptersBox.innerHTML = "<h3>📖 Select Chapter</h3>";
+  contentBox.innerHTML = "";
+
+  notesData[className][subject].forEach((chapter, index) => {
+    const btn = document.createElement("button");
+    btn.className = "secondary";
+    btn.style.display = "block";
+    btn.style.margin = "8px 0";
+    btn.textContent = chapter.chapter + " / " + chapter.hindi;
+
+    btn.onclick = function () {
+      showNotes(className, subject, index);
+    };
+
+    chaptersBox.appendChild(btn);
+  });
+}
+
+// Show Notes
+function showNotes(className, subject, index) {
+  const chapter = notesData[className][subject][index];
+
+  contentBox.innerHTML = `
+    <h3>${chapter.chapter}</h3>
+    <h4>${chapter.hindi}</h4>
+    <h3>⭐ Important Notes</h3>
+    ${chapter.notes.map(note => `<p>• ${note}</p>`).join("")}
+  `;
+}
 </script></body></html>
