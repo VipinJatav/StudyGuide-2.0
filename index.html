@@ -193,20 +193,6 @@ body[data-theme="light"] .demo {
     justify-content: flex-end;
   }
   }
-
-/* NOTES LIBRARY */
-.notes-library .notes-selectors{align-items:end}
-.notes-papers{display:flex;gap:8px;flex-wrap:wrap}
-.notes-content{display:grid;gap:12px}
-.notes-content .note{padding:16px}
-.notes-content h3{margin:0 0 10px}
-.notes-content p{white-space:pre-line;line-height:1.65;color:var(--txt)}
-.notes-content li{margin:7px 0;line-height:1.55;color:var(--txt)}
-.notes-content .muted{color:var(--muted);font-size:12px}
-.notes-lang{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
-.notes-lang button.active{outline:2px solid var(--cyan)}
-@media(max-width:700px){.notes-selectors{display:grid}.notes-selectors .field{min-width:0}}
-
 </style></head>
 <body><div class="app">
 <aside><div class="brand"><span class="logo">SG</span>StudyGuide <span style="color:var(--cyan)">AI</span></div><span class="tag">EDUCATIONAL SPACE FOR STUDENTS</span>
@@ -235,24 +221,28 @@ body[data-theme="light"] .demo {
 <p class="warning" style="margin-top:12px">Demo limitation: this version only previews your image. It does not read text from the image or send it to AI. The explanation is selected from prepared examples. Your image is not uploaded to a server.</p>
 </div></section>
 <section id="notes" class="section">
-<div class="panel notes-library">
-  <h2>▤ Notes Library</h2>
-  <p class="sub">CBSE / NCERT aligned original notes · Hindi + English</p>
-  <div class="row notes-selectors" style="margin-top:14px">
-    <div class="field"><label for="notesClass">Select Class</label><select id="notesClass"><option value="">Choose class</option></select></div>
-    <div class="field"><label for="notesSubject">Select Subject</label><select id="notesSubject" disabled><option value="">Choose subject</option></select></div>
-    <div class="field"><label for="notesChapter">Select Chapter</label><select id="notesChapter" disabled><option value="">Choose chapter</option></select></div>
-  </div>
-  <div id="notesPapers" class="notes-papers" style="margin-top:15px"></div>
-  <div id="notesContent" style="margin-top:15px"><div class="note"><h3>Start learning</h3><p>Select your class, subject and chapter to open notes.</p></div></div>
-</div></section>
+  <div class="panel">
+    <h2>📚 Notes Library</h2>
+    <p class="sub">Choose your class, subject and chapter.</p>
+
+    <label for="notesClass">Select Class</label>
+    <select id="notesClass">
+      <option value="">Choose Class</option>
+    </select>
+
+    <div id="notesSubjects" style="margin-top:15px"></div>
+    <div id="notesPapers" style="margin-top:15px"></div>
+    <div id="notesChapters" style="margin-top:15px"></div>
+    <div id="notesContent" style="margin-top:15px"></div>
+</div>
+</section>
 <section id="quiz" class="section"><div class="panel"><h2>✓ Quick Quiz</h2><p class="sub">Choose an answer and check your score.</p><form id="quizForm">
 <div class="quiz-q"><b>1. Which gas do plants take in during photosynthesis?</b><label><input type="radio" name="q1" value="a"> Oxygen</label><label><input type="radio" name="q1" value="b"> Carbon dioxide</label><label><input type="radio" name="q1" value="c"> Nitrogen</label></div>
 <div class="quiz-q"><b>2. What is the numerator in 3/4?</b><label><input type="radio" name="q2" value="a"> 3</label><label><input type="radio" name="q2" value="b"> 4</label><label><input type="radio" name="q2" value="c"> 7</label></div>
 <div class="quiz-q"><b>3. पृथ्वी लगभग कितने वर्ष पहले बनी?</b><label><input type="radio" name="q3" value="a"> 4.6 अरब वर्ष</label><label><input type="radio" name="q3" value="b"> 10 लाख वर्ष</label><label><input type="radio" name="q3" value="c"> 1000 वर्ष</label></div><button class="primary">Check answers</button><div id="result" class="result"></div></form></div></section>
 <div class="footer">StudyGuide AI · Educational demonstration only · No account or student data collection</div>
 </main></div>
-<script src="notes-data.js?v=1"></script>
+<script src="notes-data.js?v=2"></script>
 <script>
 // DARK AND LIGHT THEME
 const themeToggle = document.getElementById('themeToggle');
@@ -346,21 +336,87 @@ document.getElementById('solvePhoto').onclick=async()=>{
     box.textContent='Connection error: '+error.message;
   }
 };
+document.getElementById('quizForm').onsubmit=e=>{e.preventDefault();let f=new FormData(e.target),s=Number(f.get('q1')==='b')+Number(f.get('q2')==='a')+Number(f.get('q3')==='a');document.getElementById('result').textContent='Your score: '+s+' / 3'+(s===3?' — Excellent work!':' — Keep practising!')};
+// NOTES LIBRARY
 
-// NOTES LIBRARY RENDERER
-(function initNotesLibrary(){
-  const classEl=document.getElementById('notesClass');
-  const subjectEl=document.getElementById('notesSubject');
-  const chapterEl=document.getElementById('notesChapter');
-  const papersEl=document.getElementById('notesPapers');
-  const contentEl=document.getElementById('notesContent');
-  if(!classEl||!subjectEl||!chapterEl||!contentEl) return;
-  const store=window.notesData||{classes:{}};
-  for(let k=6;k<=12;k++){const o=document.createElement('option');o.value=String(k);o.textContent='Class '+k;classEl.appendChild(o)}
-  function fill(el,items,placeholder){el.innerHTML='';const first=document.createElement('option');first.value='';first.textContent=placeholder;el.appendChild(first);items.forEach(item=>{const o=document.createElement('option');o.value=item.value;o.textContent=item.label;el.appendChild(o)});}
-  function notice(msg){contentEl.innerHTML='<div class="note"><p>'+msg+'</p></div>'}
-  function renderPapers(cls){
-    papersEl.innerHTML='';
-    if(cls==='10'||cls==='12'){
-      const info=document.createElement('p');info.className='small';info.textContent='Official CBSE question papers (choose the year on the CBSE archive):';papersEl.appendChild(info);
-      const a=document.createElement('a');a.href='https://www.cbse.gov.in/cbsenew/question-paper.html';a.target='_blank';a.rel='noopener';a.className='secondary';a.textContent='Open CBSE Question Paper Archive';paper
+const classSelect = document.getElementById("notesClass");
+const subjectsBox = document.getElementById("notesSubjects");
+const papersBox = document.getElementById("notesPapers");
+const chaptersBox = document.getElementById("notesChapters");
+const contentBox = document.getElementById("notesContent");
+
+const subjectSelect = document.createElement("select");
+const chapterSelect = document.createElement("select");
+
+subjectSelect.id = "notesSubjectSelect";
+chapterSelect.id = "notesChapterSelect";
+
+function makeOption(value, text) {
+  const option = document.createElement("option");
+  option.value = value;
+  option.textContent = text;
+  return option;
+}
+
+function resetSelect(select, placeholder) {
+  select.innerHTML = "";
+  select.appendChild(makeOption("", placeholder));
+}
+
+resetSelect(subjectSelect, "Select Subject");
+resetSelect(chapterSelect, "Select Chapter");
+
+for (let i = 1; i <= 12; i++) {
+  classSelect.appendChild(
+    makeOption("Class " + i, "Class " + i)
+  );
+}
+
+classSelect.addEventListener("change", function () {
+  subjectsBox.innerHTML = "";
+  papersBox.innerHTML = "";
+  chaptersBox.innerHTML = "";
+  contentBox.innerHTML = "";
+
+  resetSelect(subjectSelect, "Select Subject");
+  resetSelect(chapterSelect, "Select Chapter");
+
+  if (!this.value) return;
+
+  const subjects = notesData[this.value];
+
+  if (!subjects) {
+    subjectsBox.innerHTML =
+      "<p>Notes for this class are coming soon.</p>";
+    return;
+  }
+
+  Object.keys(subjects).forEach(subject => {
+    subjectSelect.appendChild(makeOption(subject, subject));
+  });
+
+  subjectsBox.innerHTML = "<h3>Select Subject</h3>";
+  subjectsBox.appendChild(subjectSelect);
+});
+
+subjectSelect.addEventListener("change", function () {
+  chaptersBox.innerHTML = "";
+  contentBox.innerHTML = "";
+
+  resetSelect(chapterSelect, "Select Chapter");
+
+  if (!this.value) return;
+
+  const chapters = notesData[classSelect.value][this.value];
+
+  chapters.forEach((chapter, index) => {
+    chapterSelect.appendChild(
+      makeOption(index, chapter.chapter + " / " + chapter.hindi)
+    );
+  });
+
+  chaptersBox.innerHTML = "<h3>Select Chapter</h3>";
+  chaptersBox.appendChild(chapterSelect);
+});
+
+chapterSelect.addEventListener("change"
